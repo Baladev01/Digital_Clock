@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Clock</title>
+  <link rel="icon" href="https://static.vecteezy.com/system/resources/previews/011/578/582/original/digital-alarm-clock-3d-render-icon-illustration-png.png">
+  <style>
+    body {
+      height: 100vh;
+      margin: 0px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(-45deg, #ff512f, #dd2476, #1e90ff, #39ff14, #ffff00);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
+      font-family: Arial, Helvetica, sans-serif;
+      flex-direction: column;
+      color: #fff;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    #clock {
+      font-size: 120px;
+      font-weight: bold;
+      background: linear-gradient(90deg, #ff0080, #00ffe7, #ffff00, #39ff14, #1e90ff);
+      background-size: 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbowText 6s linear infinite;
+      text-shadow: 
+        2px 2px 4px rgba(250, 9, 29, 0.967),
+        -2px -2px 4px rgb(0, 0, 0),
+        0 0 10px #fff,
+        0 0 20px #ff00de,
+        0 0 40px #00ffe7,
+        0 0 80px #39ff14,
+        0 0 100px #1e90ff;
+      -webkit-text-stroke: 1px white; 
+    }
+
+    @keyframes rainbowText {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    .blink {
+      animation: blink 1s step-start infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    #date {
+      margin-top: 20px;
+      font-size: 30px;
+      padding: 12px 28px;
+      border-radius: 15px;
+      background: rgba(0, 0, 0, 0.55);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.6),
+                  0 0 40px rgba(0, 255, 255, 0.7);
+      text-shadow: 0 0 12px #fff;
+      backdrop-filter: blur(8px);
+      color: #eaf206;
+      font-weight: bold;
+    }
+
+    .circle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.5), transparent);
+      animation: float 10s infinite;
+    }
+
+    .circle:nth-child(1) { width: 220px; height: 220px; top: 10%; left: 20%; animation-delay: 0s; }
+    .circle:nth-child(2) { width: 320px; height: 320px; bottom: 15%; right: 10%; animation-delay: 3s; }
+    .circle:nth-child(3) { width: 180px; height: 180px; bottom: 30%; left: 10%; animation-delay: 6s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.7; }
+      50% { transform: translateY(-35px) scale(1.2); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+
+  <div id="clock"></div>
+  <div id="date"></div>
+
+  <script>
+    const clock = () => {
+      const now = new Date();
+      let h = now.getHours();
+      let m = now.getMinutes();
+      let s = now.getSeconds();
+      
+      let ampm = "";
+      if (h >= 12) {
+        ampm = "PM";
+      } else {
+        ampm = "AM";
+      }
+
+      h = h % 12 || 12; 
+
+      m = String(m).padStart(2, "0");
+      s = String(s).padStart(2, "0");
+
+      const colon = `<span class="blink">:</span>`;
+      document.getElementById("clock").innerHTML = `${h}${colon}${m}${colon}${s} ${ampm}`;
+
+      document.getElementById("date").textContent = now.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
+    }
+
+    setInterval(clock, 1000);
+    clock();
+  </script>
+
+</body>
+</html>
